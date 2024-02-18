@@ -16,6 +16,11 @@ void merge(int *array, int *temp, size_t start, size_t middle, size_t end)
 	j = middle;
 	k = start;
 
+	printf("Merging...\n");
+	printf("[left]: ");
+	print_array(array + start, middle - start);
+	printf("[right]: ");
+	print_array(array + middle, end - middle);
 	while (i < middle && j < end)
 	{
 		if (array[i] < array[j])
@@ -27,21 +32,20 @@ void merge(int *array, int *temp, size_t start, size_t middle, size_t end)
 			temp[k++] = array[j++];
 		}
 	}
-
 	while (i < middle)
 	{
 		temp[k++] = array[i++];
 	}
-
 	while (j < end)
 	{
 		temp[k++] = array[j++];
 	}
-
 	for (i = start; i < end; i++)
 	{
 		array[i] = temp[i];
 	}
+	printf("[Done]: ");
+	print_array(temp + start, end - start);
 }
 
 /**
