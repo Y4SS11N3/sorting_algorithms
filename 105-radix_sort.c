@@ -30,16 +30,11 @@ int get_max(int *array, size_t size)
  * @array: The array to sort.
  * @size: The size of the array.
  * @exp: The current significant digit to sort by.
+ * @output: A buffer to store the sorted array.
  */
-void counting_sort_radix(int *array, size_t size, int exp)
+void counting_sort_radix(int *array, size_t size, int exp, int *output)
 {
-	int *output = malloc(sizeof(int) * size);
 	int i, count[10] = {0};
-
-	if (!output)
-	{
-		return;
-	}
 
 	for (i = 0; i < (int)size; i++)
 	{
@@ -61,8 +56,6 @@ void counting_sort_radix(int *array, size_t size, int exp)
 	{
 		array[i] = output[i];
 	}
-
-	free(output);
 }
 
 /**
@@ -75,16 +68,25 @@ void radix_sort(int *array, size_t size)
 {
 	int max = get_max(array, size);
 	int exp;
+	int *output;
 
 	if (!array || size < 2)
 	{
 		return;
 	}
 
+	output = malloc(sizeof(int) * size);
+	if (!output)
+	{
+		return;
+	}
+
 	for (exp = 1; max / exp > 0; exp *= 10)
 	{
-		counting_sort_radix(array, size, exp);
+		counting_sort_radix(array, size, exp, output);
 		print_array(array, size);
 	}
+
+	free(output);
 }
 
