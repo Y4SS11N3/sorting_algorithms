@@ -5,7 +5,6 @@
  * @array: The array to be sorted
  * @size: The size of the array
  * @count: The count array
- * @k: The maximum value in the array
  */
 void counting_sort_helper(int *array, size_t size, int *count)
 {
