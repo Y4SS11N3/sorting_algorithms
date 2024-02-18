@@ -28,19 +28,18 @@ void swap(int *a, int *b, int *array, size_t size)
  */
 void bitonic_merge(int *array, size_t size, int low, int cnt, int dir)
 {
-	int i, k = cnt / 2;
+	size_t i, jump = cnt / 2;
 
 	if (cnt > 1)
 	{
-		for (i = low; i < low + k; i++)
+		for (i = low; i < low + jump; i++)
 		{
-			if ((dir && array[i] > array[i + k]) || (!dir && array[i] < array[i + k]))
-			{
-				swap(&array[i], &array[i + k], array, size);
-			}
+			if ((dir == 1 && array[i] > array[i + jump]) ||
+			    (dir == 0 && array[i] < array[i + jump]))
+				swap(array + i, array + i + jump, array, size);
 		}
-		bitonic_merge(array, size, low, k, dir);
-		bitonic_merge(array, size, low + k, k, dir);
+		bitonic_merge(array, size, low, jump, dir);
+		bitonic_merge(array, size, low + jump, jump, dir);
 	}
 }
 
@@ -54,17 +53,20 @@ void bitonic_merge(int *array, size_t size, int low, int cnt, int dir)
  */
 void bitonic_sort_rec(int *array, size_t size, int low, int cnt, int dir)
 {
-	int k = cnt / 2;
+	size_t cut = cnt / 2;
+	char *str = (dir == 1) ? "UP" : "DOWN";
 
 	if (cnt > 1)
 	{
-		printf("Merging [%d/%lu] (%s):\n", cnt, size, dir ? "UP" : "DOWN");
+		printf("Merging [%u/%lu] (%s):\n", cnt, size, str);
 		print_array(array + low, cnt);
-		bitonic_sort_rec(array, size, low, k, 1);
-		bitonic_sort_rec(array, size, low + k, k, 0);
+
+		bitonic_sort_rec(array, size, low, cut, 1);
+		bitonic_sort_rec(array, size, low + cut, cut, 0);
+		printf("Result [%u/%lu] (%s):\n", cnt, size, str);
+		print_array(array + low, cnt);
+
 		bitonic_merge(array, size, low, cnt, dir);
-		printf("Result [%d/%lu] (%s):\n", cnt, size, dir ? "UP" : "DOWN");
-		print_array(array + low, cnt);
 	}
 }
 
@@ -75,12 +77,9 @@ void bitonic_sort_rec(int *array, size_t size, int low, int cnt, int dir)
  */
 void bitonic_sort(int *array, size_t size)
 {
-	if (!array || size < 2)
-	{
+	if (array == NULL || size < 2)
 		return;
-	}
 
 	bitonic_sort_rec(array, size, 0, size, 1);
-	print_array(array, size);
 }
 
