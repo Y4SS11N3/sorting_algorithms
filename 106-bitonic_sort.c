@@ -58,10 +58,13 @@ void bitonic_sort_rec(int *array, size_t size, int low, int cnt, int dir)
 
 	if (cnt > 1)
 	{
+		printf("Merging [%d/%lu] (%s):\n", cnt, size, dir ? "UP" : "DOWN");
 		print_array(array + low, cnt);
 		bitonic_sort_rec(array, size, low, k, 1);
 		bitonic_sort_rec(array, size, low + k, k, 0);
 		bitonic_merge(array, size, low, cnt, dir);
+		printf("Result [%d/%lu] (%s):\n", cnt, size, dir ? "UP" : "DOWN");
+		print_array(array + low, cnt);
 	}
 }
 
