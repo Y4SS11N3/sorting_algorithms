@@ -33,79 +33,48 @@ void swap_nodes(listint_t **list, listint_t *a, listint_t *b)
  */
 void cocktail_sort_list(listint_t **list)
 {
-	char swapped = 1;
+	int swapped = 1;
 	listint_t *node;
 
 	if (!list || !(*list) || !(*list)->next)
-	{
 		return;
-	}
 
+	node = *list;
 	while (swapped)
 	{
 		swapped = 0;
-		node = *list;
-		swapped = forward_pass(list, node);
+		sort_pass(list, &node, &swapped, 0);
+
 		if (!swapped)
-		{
 			break;
-		}
-		swapped = backward_pass(list, node);
+
+		sort_pass(list, &node, &swapped, 0);
 	}
 }
 
 /**
- * forward_pass - Performs a forward pass through the list
- * @list: Double pointer to the head of the doubly linked list
- * @node: Current node in the list
- *
- * Return: 1 if a swap was made, 0 otherwise
+ * sort_pass - Makes a pass through the list in the given direction
+ * @list: Double pointer to the head of the list
+ * @node: Double pointer to current node
+ * @swapped: Pointer to swapped flag
+ * @forward: Flag for the direction of the sort
  */
-char forward_pass(listint_t **list, listint_t *node)
+void sort_pass(listint_t **list, listint_t **node, int *swapped, int forward)
 {
-	char swapped = 0;
-
-	while (node->next)
+	while ((*node) && (forward ? (*node)->next : (*node)->prev))
 	{
-		if (node->n > node->next->n)
+		if ((forward && (*node)->n > (*node)->next->n) ||
+			(!forward && (*node)->n < (*node)->prev->n))
 		{
-			swap_nodes(list, node, node->next);
+			swap_nodes(list, forward ? *node : (*node)->prev, forward ?
+			(*node)->next : *node);
 			print_list(*list);
-			swapped = 1;
+			*node = forward ? (*node)->prev : (*node)->next;
+			*swapped = 1;
 		}
 		else
 		{
-			node = node->next;
+			*node = forward ? (*node)->next : (*node)->prev;
 		}
 	}
-
-	return (swapped);
-}
-
-/**
- * backward_pass - Performs a backward pass through the list
- * @list: Double pointer to the head of the doubly linked list
- * @node: Current node in the list
- *
- * Return: 1 if a swap was made, 0 otherwise
- */
-char backward_pass(listint_t **list, listint_t *node)
-{
-	char swapped = 0;
-
-	while (node->prev)
-	{
-		if (node->n < node->prev->n)
-		{
-			swap_nodes(list, node->prev, node);
-			print_list(*list);
-			swapped = 1;
-		}
-		else
-		{
-			node = node->prev;
-		}
-	}
-
-	return (swapped);
 }
