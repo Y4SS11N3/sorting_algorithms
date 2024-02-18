@@ -25,33 +25,6 @@ void swap_nodes(listint_t **list, listint_t *a, listint_t *b)
 		*list = b;
 	}
 }
-
-/**
- * cocktail_sort_list - Sorts a doubly linked list of integers in ascending
- * order using the Cocktail shaker sort algorithm
- * @list: Double pointer to the head of the doubly linked list
- */
-void cocktail_sort_list(listint_t **list)
-{
-	int swapped = 1;
-	listint_t *node;
-
-	if (!list || !(*list) || !(*list)->next)
-		return;
-
-	node = *list;
-	while (swapped)
-	{
-		swapped = 0;
-		sort_pass(list, &node, &swapped, 0);
-
-		if (!swapped)
-			break;
-
-		sort_pass(list, &node, &swapped, 0);
-	}
-}
-
 /**
  * sort_pass - Makes a pass through the list in the given direction
  * @list: Double pointer to the head of the list
@@ -76,5 +49,30 @@ void sort_pass(listint_t **list, listint_t **node, int *swapped, int forward)
 		{
 			*node = forward ? (*node)->next : (*node)->prev;
 		}
+	}
+}
+/**
+ * cocktail_sort_list - Sorts a doubly linked list of integers in ascending
+ * order using the Cocktail shaker sort algorithm
+ * @list: Double pointer to the head of the doubly linked list
+ */
+void cocktail_sort_list(listint_t **list)
+{
+	int swapped = 1;
+	listint_t *node;
+
+	if (!list || !(*list) || !(*list)->next)
+		return;
+
+	node = *list;
+	while (swapped)
+	{
+		swapped = 0;
+		sort_pass(list, &node, &swapped, 1);
+
+		if (!swapped)
+			break;
+
+		sort_pass(list, &node, &swapped, 0);
 	}
 }
