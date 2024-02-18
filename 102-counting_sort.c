@@ -7,7 +7,7 @@
  * @count: The count array
  * @k: The maximum value in the array
  */
-void counting_sort_helper(int *array, size_t size, int *count, int k)
+void counting_sort_helper(int *array, size_t size, int *count)
 {
 	int *output;
 	size_t i;
@@ -75,7 +75,7 @@ void counting_sort(int *array, size_t size)
 
 	print_array(count, (size_t)k + 1);
 
-	counting_sort_helper(array, size, count, k);
+	counting_sort_helper(array, size, count);
 
 	free(count);
 }
